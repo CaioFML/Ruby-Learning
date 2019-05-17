@@ -41,6 +41,19 @@ def livro_para_newsletter(livro)
 	end
 end
 
+class Array
+	attr_reader :maximo_necessario
+
+	def <<(livro)
+		push(livro)
+		if @maximo_necessario.nil? || @maximo_necessario < size
+			@maximo_necessario = size
+		end
+		self
+	end
+
+end
+
 class Estoque
 	attr_reader :livros
 
@@ -81,15 +94,11 @@ end
 
 estoque = Estoque.new
 estoque.adiciona Livro.new("Algoritmos", 100, 1998, true)
+puts estoque.livros.maximo_necessario
 estoque.adiciona Livro.new("Introducao a Arquitetura e Design de Software", 80, 2011, true)
+puts estoque.livros.maximo_necessario
 estoque.adiciona Livro.new("The Pragmatic Programmer", 100, 1999, true)
+puts estoque.livros.maximo_necessario
 estoque.adiciona Livro.new("Programming Ruby", 100, 2004, true)
-estoque.adiciona nil
-
+puts estoque.livros.maximo_necessario
 estoque.exporta_csv
-estoque.total
-baratos = estoque.mais_baratos_que(80)
-baratos.each do |livro|
-	puts livro.titulo
-end
-
