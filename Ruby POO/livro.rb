@@ -41,9 +41,7 @@ def livro_para_newsletter(livro)
 	end
 end
 
-class Array
-	attr_reader :maximo_necessario
-
+module Contador
 	def <<(livro)
 		push(livro)
 		if @maximo_necessario.nil? || @maximo_necessario < size
@@ -52,13 +50,16 @@ class Array
 		self
 	end
 
+	attr_reader :maximo_necessario
 end
+
 
 class Estoque
 	attr_reader :livros
 
 	def initialize
 		@livros = []
+		@livros.extend Contador
 	end
 
 	def exporta_csv
@@ -77,10 +78,18 @@ class Estoque
 		@livros.size
 	end
 
-	def adiciona(livro)
+	def <<(livro)
 		@livros << livro if livro
+		self
 	end
 
+	def remove(livro)
+		@livros.delete livro
+	end
+
+	def maximo_necessario
+		@livros.maximo_necessario
+	end
 end
 
 
@@ -93,12 +102,12 @@ end
 
 
 estoque = Estoque.new
-estoque.adiciona Livro.new("Algoritmos", 100, 1998, true)
-puts estoque.livros.maximo_necessario
-estoque.adiciona Livro.new("Introducao a Arquitetura e Design de Software", 80, 2011, true)
-puts estoque.livros.maximo_necessario
-estoque.adiciona Livro.new("The Pragmatic Programmer", 100, 1999, true)
-puts estoque.livros.maximo_necessario
-estoque.adiciona Livro.new("Programming Ruby", 100, 2004, true)
-puts estoque.livros.maximo_necessario
+estoque << Livro.new("Algoritmos", 100, 1998, true)
+puts estoque.maximo_necessario
+estoque << Livro.new("Introducao a Arquitetura e Design de Software", 80, 2011, true)
+puts estoque.maximo_necessario
+estoque << Livro.new("The Pragmatic Programmer", 100, 1999, true)
+puts estoque.maximo_necessario
+estoque << Livro.new("Programming Ruby", 100, 2004, true)
+puts estoque.maximo_necessario
 estoque.exporta_csv
