@@ -13,16 +13,34 @@ class Estoque
 		@vendas.count {|venda| campo.call(venda) == campo.call(produto)}
 	end
 
+	def que_mais_vendeu_por(tipo, &campo)
+		@vendas.select {|l| l.tipo == tipo}.sort {|v1,v2|
+			quantidade_de_vendas_de_titulo(v1, &campo) <=>
+			quantidade_de_vendas_de_titulo(v2, &campo)}.last
+	end
+
 	def livro_que_mais_vendeu_por_titulo
-		@vendas.sort {|v1,v2|
-			quantidade_de_vendas_de_titulo(v1, &titulo) <=>
-			quantidade_de_vendas_de_titulo(v2, &titulo)}.last
+		que_mais_vendeu_por("livro", &:titulo)
+	end
+
+	def livro_que_mais_vendeu_por_editora
+		que_mais_vendeu_por("livro", &:editora)
 	end
 
 	def livro_que_mais_vendeu_por_ano
-		@vendas.sort {|v1,v2|
-			quantidade_de_vendas_de_ano(v1, &ano_lancamento) <=>
-			quantidade_de_vendas_de_ano(v2, &ano_lancamento)}.last
+		que_mais_vendeu_por("livro", &:ano)
+	end
+
+		def revista_que_mais_vendeu_por_titulo
+		que_mais_vendeu_por("revista", &:titulo)
+	end
+
+	def revista_que_mais_vendeu_por_editora
+		que_mais_vendeu_por("revista", &:editora)
+	end
+
+	def revista_que_mais_vendeu_por_ano
+		que_mais_vendeu_por("revista", &:ano)
 	end
 
 	def exporta_csv
@@ -46,7 +64,7 @@ class Estoque
 		self
 	end
 
-	def venda(livro)
+	def vende(livro)
 		@livros.delete livro
 		@vendas << livro
 	end

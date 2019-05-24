@@ -17,17 +17,22 @@ def mais_baratos_que(estoque, valor)
 end
 
 
-algoritmos = Livro.new("Algoritmos", 100, 1998, true, "")
-arquitetura = Livro.new("Introducao a Arquitetura e Design de Software", 80, 2011, true, "")
-programmer = Livro.new("The Pragmatic Programmer", 100, 1999, true, "")
-ruby = Livro.new("Programming Ruby", 100, 2004, true, "")
+algoritmos = Livro.new("Algoritmos", 100, 1998, true, "", "livro")
+arquitetura = Livro.new("Introducao a Arquitetura e Design de Software", 80, 2011, true, "", "livro")
+programmer = Livro.new("The Pragmatic Programmer", 100, 1999, true, "", "livro")
+ruby = Livro.new("Programming Ruby", 100, 2004, true, "", "livro")
+revistona = Livro.new("Artigo de Ruby", 10, 2012, true, "Revistas", "revista")
 
 
 estoque = Estoque.new
-estoque << algoritmos << algoritmos << ruby << programmer << arquitetura << ruby << ruby
+estoque << algoritmos << algoritmos << ruby << programmer << arquitetura << ruby << ruby <<
+revistona << revistona
 
-estoque.venda ruby
-estoque.venda algoritmos
-estoque.venda algoritmos
+estoque.vende ruby
+estoque.vende algoritmos
+estoque.vende algoritmos
+estoque.vende revistona
 
 puts estoque.livro_que_mais_vendeu_por_titulo.titulo
+puts estoque.revista_que_mais_vendeu_por_titulo.titulo
+
