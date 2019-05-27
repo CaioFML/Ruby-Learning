@@ -21,7 +21,8 @@ class Estoque
 	end
 
 	def respond_to?(name)
-		name.to_s.match "(.+)_que_mais_vendeu_por_(.+)" || super
+		matched = name.to_s.match "(.+)_que_mais_vendeu_por_(.+)" || super
+		!!(matched) || super
 	end
 
 	def exporta_csv
@@ -53,16 +54,16 @@ class Estoque
 	def maximo_necessario
 		@livros.maximo_necessario
 	end
-end
 
 private
 
-def quantidade_de_vendas_de_titulo(produto, &campo)
+	def quantidade_de_vendas_de_titulo(produto, &campo)
 		@vendas.count {|venda| campo.call(venda) == campo.call(produto)}
 	end
 
 	def que_mais_vendeu_por(tipo, &campo)
-		@vendas.select {|l| l.tipo == tipo}.sort {|v1,v2|
+		@vendas.select {|produto| produto.matches?(tipo)}.sort {|v1,v2|
 			quantidade_de_vendas_de_titulo(v1, &campo) <=>
 			quantidade_de_vendas_de_titulo(v2, &campo)}.last
 	end
+end
